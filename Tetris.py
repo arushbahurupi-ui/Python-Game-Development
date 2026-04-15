@@ -1,0 +1,91 @@
+import pgzrun
+import random
+
+HEIGHT = 750
+WIDTH = 500
+random_shape = []
+
+x_shape = 200
+y_shape = 0
+index = 0
+rotate_counter = 0
+index_1 = 0
+last_x_shape = 0
+last_y_shape = 0
+
+shapes_list = [[[1],[1],[1],[1]],
+               [[1,1,1],[0,1,0]],
+               [[1,0],[1,0],[1,1]],
+               [[0,1],[0,1],[1,1]],
+               [[1,0],[1,1],[0,1]],
+               [[0,1],[1,1],[1,0]]]
+
+
+
+shape_rotation = [[[[1],[1],[1],[1]], [[1,1,1,1], [0,0,0,0]]],
+
+                  [[[1,1,1],[0,1,0]], [[1,0], [1,1], [1,0]], [[0,1,0], [1,1,1]], [[0,1],[1,1],[0,1]]],
+
+                  [[[1,0],[1,0],[1,1]], [[0,0,1], [1,1,1]], [[1,1],[0,1],[0,1]], [[1,1,1], [1,0,0]]],
+
+                  [[[0,1],[0,1],[1,1]], [[1,1,1], [0,0,1]], [[1,1],[1,0],[1,0]], [[1,0,0], [1,1,1]]],
+
+                  [[[1,0],[1,1],[0,1]], [[0,1,1], [1,1,0]]],
+
+                  [[[0,1],[1,1],[1,0]], [[1,1,0], [0,1,1]]]]
+
+
+
+
+
+def draw():
+    screen.clear()
+    for i in range(len(random_shape)):
+        for j in range(len(random_shape[i])):
+            if random_shape[i][j] == 1:
+                screen.draw.filled_rect(Rect(j * 50 + x_shape,i * 50 + y_shape, 50, 50), "red")
+
+
+
+
+
+
+def pickshape():
+    global random_shape, x_shape, y_shape, index, rotate_counter
+
+    index = random.randint(0,5)
+    random_shape = shapes_list[index]
+    x_shape = 200
+    y_shape = 0
+    rotate_counter = 0
+
+def rotate():
+    global rotate_counter, index, index_1, random_shape
+
+    rotate_counter += 1
+
+    index_1 = rotate_counter % len(shape_rotation[index])
+
+    random_shape = shape_rotation[index][index_1]
+
+
+
+
+def on_key_down(key):
+    global  x_shape, y_shape
+    if key == keys.A  and x_shape > 0 :
+        x_shape -= 50
+    if key == keys.S:
+        y_shape += 50
+    if key == keys.D and 500 - x_shape > 50 * len(random_shape[0]):
+        x_shape += 50
+    if key == keys.SPACE:
+        rotate()
+
+
+def update():
+    global y_shape, x_shape
+    y_shape +=1
+
+pickshape()
+pgzrun.go()
